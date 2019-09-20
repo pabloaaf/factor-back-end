@@ -1,0 +1,13 @@
+{
+    "name": "back-end",
+    "version": "1.0.0",
+    "description": "Node Application",
+    "main": "app.js",
+    "scripts": {
+      "start": "node app.js"
+    },
+    "author": "Pablo Alvarez",
+    "dependencies": {
+      "express": "^4.8.5"
+    }
+  }
