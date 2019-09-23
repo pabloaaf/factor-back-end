@@ -8,7 +8,7 @@ var app = express();
 app.get('/', function (req, res) {
 
     // Returning Hello World Message:
-    res.send('<h1>Node Application</h1>');
+    res.send(JSON.stringify({Message:"back Works"}));
 });
 
 // Create an HTTP server to run our application
