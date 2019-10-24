@@ -6,8 +6,17 @@ const router = express.Router();
 const User = require("../models/userModel");
 
 //Set up default mongoose connection
-const dbHost = 'mongodb://database/mean-docker';
-mongoose.connect(dbHost);
+const mongoUrl = 'mongodb://database/mean-docker';
+
+var connectWithRetry = function() {
+  return mongoose.connect(mongoUrl, function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+      setTimeout(connectWithRetry, 5000);
+    }
+  });
+};
+connectWithRetry();
 
 /* GET api listing. */
 router.get('/', (req, res) => {
