@@ -27,6 +27,6 @@ app.use(function(req, res, next) {
 app.use('/', api);
 
 // Create an HTTP server to run our application
-var server = app.listen(config.PORT, function () {
-    console.log('Application port: ' + config.PORT);
+var server = app.listen(process.env.PORT, function () {
+    console.log('Application port: ' + process.env.PORT);
 });

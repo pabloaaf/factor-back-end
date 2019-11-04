@@ -11,4 +11,4 @@ RUN npm install
 EXPOSE 3000
 
 #start
-CMD npm start
+CMD npm run start_local
