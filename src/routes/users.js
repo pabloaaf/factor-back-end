@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 
 /* GET api listing. */
 router.get('/oauth', async (req, res) => {
-	res.status(200).json({url: Google.urlGoogle()});
+	res.status(200).json(Google.urlGoogle());
 });
 
 /* confirm login. */
@@ -41,7 +41,7 @@ router.post('/login', (req, res) => {
 	    	res.status(200).json({authlvl: 0, err: "Proceding to register the user"}); return;
 	    }
 	    // Return if password is wrong
-	    else if (!user.validPassword(password)) {
+	    else if (!user.validPassword(req.body.password)) {
 	        res.status(200).json({authlvl: -1, err: "Invalid pasword"}); return;
 	    }
 	    // If credentials are correct, return the user object
