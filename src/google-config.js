@@ -85,3 +85,8 @@ async function getGoogleAccountFromCode(code) {
   return user;
 
 }
+
+module.exports = {
+    urlGoogle: urlGoogle,
+    getGoogleAccountFromCode: getGoogleAccountFromCode
+};

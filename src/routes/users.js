@@ -26,7 +26,7 @@ router.get('/', (req, res) => {
 
 /* GET api listing. */
 router.get('/oauth', async (req, res) => {
-	res.status(200).json({url: await Google.urlGoogle()});
+	res.status(200).json({url: Google.urlGoogle()});
 });
 
 /* confirm login. */

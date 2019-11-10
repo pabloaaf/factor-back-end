@@ -22,8 +22,8 @@ app.use(function(req, res, next) {
 	res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
 	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization'); // Content-Type
 	res.setHeader('Access-Control-Allow-Credentials', true);
-next();
-})
+	next();
+});
 
 // Set our api routes
 app.use('/', api);
