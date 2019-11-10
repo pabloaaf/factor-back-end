@@ -31,15 +31,23 @@ router.get('/oauth', async (req, res) => {
 
 /* confirm login. */
 router.post('/login', (req, res) => {
-	User.find(req.body.email, (err, user) => {
-		if (!user) {
-			res.status(200).json({authlvl: 0, err: "Proceding to register the user"});
-		}
-		if (!user.validPassword(password)) {
-			res.status(200).json({authlvl: -1, err: "Invalid pasword"});
-		}
+	console.log(req.body.email);
+	User.findOne({ email: req.body.email }, function (err, user) {
+		//console.log(user);
+      	//if (err) { return done(err); }
+	    // Return if user not found in database
+	    //res.status(200).json({authlvl: 0});
+	    if (!user) {
+	    	res.status(200).json({authlvl: 0, err: "Proceding to register the user"}); return;
+	    }
+	    // Return if password is wrong
+	    else if (!user.validPassword(password)) {
+	        res.status(200).json({authlvl: -1, err: "Invalid pasword"}); return;
+	    }
+	    // If credentials are correct, return the user object
 		console.log(user);
-		res.status(200).json({authlvl: user.authlvl, token: user.token}); // user found
+		res.status(200).json({authlvl: user.authlvl, token: user.generateJwt()}); // user found
+		return;
 	});
 });
 
@@ -47,6 +55,7 @@ router.get('/callback', async (req, res) => {
 	var userLog = await Google.getGoogleAccountFromCode(req.query.code);
 	register(userLog);
   	res.status(200).json(userLog);
+  	return;
 });
 
 function register(userLog) {
@@ -65,18 +74,20 @@ function register(userLog) {
 /* GET all users. */
 router.get('/users', (req, res) => {
 	User.find({}, (err, users) => {
-		if (err) res.status(500).send(error);
+		if (err) {res.status(500).send(error); return;}
 
 		res.status(200).json(users);
+		return;
 	});
 });
 
 /* GET one users. */
 router.get('/users/:id', (req, res) => {
 	User.findById(req.params.id, (err, user) => {
-		if (err) res.status(500).send(error)
+		if (err) {res.status(500).send(error); return;}
 
 		res.status(200).json(user);
+		return;
 	});
 });
 
@@ -89,9 +100,10 @@ router.post('/users', (req, res) => {
 	});
 
 	user.save(error => {
-		if (error) res.status(500).send(error);
+		if (error) {res.status(500).send(error); return;}
 
 		res.status(201).json({message: 'User created successfully'});
+		return;
 	});
 });
 

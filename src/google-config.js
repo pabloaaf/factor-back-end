@@ -54,7 +54,7 @@ function getGooglePlusApi(auth) {
 /**
  * Part 1: Create a Google URL and send to the client to log in the user.
  */
-async function urlGoogle() {
+function urlGoogle() {
   const auth = createConnection();
   const url = getConnectionUrl(auth);
   return url;
