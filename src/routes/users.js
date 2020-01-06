@@ -52,8 +52,10 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/callback', async (req, res) => {
+	console.log(req.query.code);
 	var userLog = await Google.getGoogleAccountFromCode(req.query.code);
-	register(userLog);
+	console.log(userLog);
+	//register(userLog);
   	res.status(200).json(userLog);
   	return;
 });
@@ -64,7 +66,7 @@ function register(userLog) {
   user.name = "";
   user.email = userLog.email;
 
-  user.setPassword(userLog.password);
+  //user.setPassword(userLog.password);
 
   user.save();
   token = user.generateJwt();

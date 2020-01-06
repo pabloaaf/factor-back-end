@@ -24,7 +24,6 @@ function createConnection() {
  * This scope tells google what information we want to request.
  */
 const infoScope = [
-  'https://www.googleapis.com/auth/plus.me',
   'https://www.googleapis.com/auth/userinfo.email',
   'https://www.googleapis.com/auth/userinfo.profile',
 ];
@@ -41,8 +40,8 @@ function getConnectionUrl(auth) {
   });
 }
 
-function getGooglePlusApi(auth) {
-  return google.plus({ version: 'v1', auth });
+function getGoogleApi(auth) {
+  return google.oauth2('v2').userinfo.get({auth: auth});
 }
 
 
@@ -62,7 +61,7 @@ function urlGoogle() {
 
 /**
  * Part 2: Take the "code" parameter which Google gives us once when the user logs in, then get the user's email and id.
- */
+ */ 
 async function getGoogleAccountFromCode(code) {
   const auth = createConnection();
   // get the auth "tokens" from the request
@@ -71,15 +70,18 @@ async function getGoogleAccountFromCode(code) {
   // add the tokens to the google api so we have access to the account
   auth.setCredentials(tokens);
   // connect to google plus - need this to get the user's email
-  const plus = getGooglePlusApi(auth);
-  const me = await plus.people.get({ userId: 'me' });
+  const gooauth = getGoogleApi(auth);
+  //const me = await plus.people.get({ userId: 'me' });
   // get the google id and email
-  const userGoogleId = me.data.id;
-  const userGoogleEmail = me.data.emails && me.data.emails.length && me.data.emails[0].value;
+  //const userGoogleId = me.data.id;
+  //const userGoogleEmail = me.data.emails && me.data.emails.length && me.data.emails[0].value;
   // return so we can login or sign up the user
+  console.log("antes");
+  console.log(gooauth.data);
+  console.log("despues");
   var user = {
-    id: userGoogleId,
-    email: userGoogleEmail,
+    id: gooauth.data.id,
+    email: gooauth.data.email,
     tokens: tokens,
   };
   return user;
