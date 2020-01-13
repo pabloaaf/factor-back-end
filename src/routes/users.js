@@ -54,7 +54,10 @@ router.post('/login', (req, res) => {
 router.get('/callback', async (req, res) => {
 	console.log(req.query.code);
 	var userLog = await Google.getGoogleAccountFromCode(req.query.code);
+	console.log("despues2");
 	console.log(userLog);
+	console.log("despues3");
+
 	//register(userLog);
   	res.status(200).json(userLog);
   	return;

@@ -5,11 +5,20 @@ var jwt = require('jsonwebtoken');
 
 // schema
 const userSchema = new mongoose.Schema({
-  email: { type: String, unique: true, required: true },
-  name: { type: String, required: true },
+  email: { type: String, unique: true, required: true }, //The user's email address.
+  family_name: { type: String}, //The user's last name.
+  gender: { type: String}, //The user's gender.
+  given_name: { type: String}, //The user's first name.
+  hd: { type: String}, //The hosted domain e.g. example.com if the user is Google apps user.
+  id: { type: String}, //The obfuscated ID of the user.
+  link: { type: String}, //URL of the profile page.
+  locale: { type: String}, //The user's preferred locale.
+  name: { type: String, required: true }, //The user's full name.
+  picture: { type: String}, //URL of the user's picture image.
+  verified_email:boolean //Boolean flag which is true if the email address is verified. Always verified because we only return the user's primary email address.
   authlvl: {type:Number},
   hash: {type:String},
-  salt: {type:String},
+  salt: {type:String}
 });
 
 userSchema.methods.setPassword = function(password){

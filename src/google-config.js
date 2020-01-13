@@ -26,6 +26,7 @@ function createConnection() {
 const infoScope = [
   'https://www.googleapis.com/auth/userinfo.email',
   'https://www.googleapis.com/auth/userinfo.profile',
+  //'https://www.googleapis.com/oauth2/v2/userinfo'
 ];
 
 /**
@@ -36,13 +37,15 @@ function getConnectionUrl(auth) {
   return auth.generateAuthUrl({
     access_type: 'offline',
     prompt: 'consent', // access type and approval prompt will force a new refresh token to be made each time signs in
-    scope: infoScope
+    scope: infoScope,
+    clientId: googleConfig.clientId,
+    redirect_uri: googleConfig.redirect
   });
 }
 
-function getGoogleApi(auth) {
+/*function getGoogleApi(auth) {
   return google.oauth2('v2').userinfo.get({auth: auth});
-}
+}*/
 
 
 
@@ -67,10 +70,12 @@ async function getGoogleAccountFromCode(code) {
   // get the auth "tokens" from the request
   const data = await auth.getToken(code);
   const tokens = data.tokens;
+  console.log(data);
   // add the tokens to the google api so we have access to the account
   auth.setCredentials(tokens);
   // connect to google plus - need this to get the user's email
-  const gooauth = getGoogleApi(auth);
+  //const gooauth = getGoogleApi(auth);
+  const gooauth = await google.oauth2('v2').userinfo.get({auth: auth});
   //const me = await plus.people.get({ userId: 'me' });
   // get the google id and email
   //const userGoogleId = me.data.id;
@@ -80,12 +85,19 @@ async function getGoogleAccountFromCode(code) {
   console.log(gooauth.data);
   console.log("despues");
   var user = {
-    id: gooauth.data.id,
     email: gooauth.data.email,
-    tokens: tokens,
+    family_name: gooauth.data.family_name,
+    given_name: gooauth.data.given_name,
+    hd: gooauth.data.hd,
+    id: gooauth.data.id,
+    link: gooauth.data.link,
+    locale: gooauth.data.locale,
+    name: gooauth.data.name,
+    picture: gooauth.data.picture,
+    verified_email: gooauth.data.verified_email,
+    tokens: tokens
   };
   return user;
-
 }
 
 module.exports = {
