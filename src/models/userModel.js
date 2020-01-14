@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   locale: { type: String}, //The user's preferred locale.
   name: { type: String, required: true }, //The user's full name.
   picture: { type: String}, //URL of the user's picture image.
-  verified_email:boolean //Boolean flag which is true if the email address is verified. Always verified because we only return the user's primary email address.
+  verified_email: { type: Boolean}, //Boolean flag which is true if the email address is verified. Always verified because we only return the user's primary email address.
   authlvl: {type:Number},
   hash: {type:String},
   salt: {type:String}

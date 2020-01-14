@@ -51,9 +51,13 @@ router.post('/login', (req, res) => {
 	});
 });
 
-router.get('/callback', async (req, res) => {
-	console.log(req.query.code);
-	var userLog = await Google.getGoogleAccountFromCode(req.query.code);
+router.post('/callback', async (req, res) => {
+	console.log(req.body.code);
+	if(!req.body.code){
+		res.status(404).json({message: 'no code'});
+		return;
+	}
+	var userLog = await Google.getGoogleAccountFromCode(req.body.code);
 	console.log("despues2");
 	console.log(userLog);
 	console.log("despues3");
