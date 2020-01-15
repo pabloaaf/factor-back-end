@@ -38,6 +38,19 @@ userSchema.methods.generateJwt = function() {
     given_name: this.given_name,
     picture: this.picture,
     authlvl: this.authlvl,
+    exp: parseInt(expiry.getTime() / 1000)
+  }, process.env.SECRET_JWT);
+};
+
+userSchema.methods.generateMinJwt = function() {
+  var expiry = new Date();
+  expiry.setDate(expiry.getDate() + 7);
+
+  return jwt.sign({
+    _id: this._id,
+    email: this.email,
+    family_name: this.family_name,
+    given_name: this.given_name,
     exp: parseInt(expiry.getTime() / 1000),
   }, process.env.SECRET_JWT);
 };
