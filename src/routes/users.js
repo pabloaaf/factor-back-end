@@ -33,17 +33,11 @@ router.get('/oauth', async (req, res) => {
 router.post('/login', (req, res) => {
 	console.log(req.body.email);
 	User.findOne({ email: req.body.email }, function (err, user) {
-		//console.log(user);
-      	//if (err) { return done(err); }
+		if (err) {res.status(500).send(error); return;}
 	    // Return if user not found in database
-	    //res.status(200).json({authlvl: 0});
-	    if (!user) {
-	    	res.status(200).json({authlvl: 0, err: "Proceding to register the user"}); return;
-	    }
+	    if (!user) {res.status(200).json({authlvl: 0, err: "Proceding to register the user"}); return;}
 	    // Return if password is wrong
-	    else if (!user.validPassword(req.body.password)) {
-	        res.status(200).json({authlvl: -1, err: "Invalid pasword"}); return;
-	    }
+	    if (!user.validPassword(req.body.pass)) {res.status(200).json({authlvl: -1, err: "Invalid pasword"}); return;}
 	    // If credentials are correct, return the user object
 		console.log(user);
 		res.status(200).json({authlvl: user.authlvl, token: user.generateJwt()}); // user found
@@ -52,35 +46,42 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/callback', async (req, res) => {
-	console.log(req.body.code);
+	//console.log(req.body.code);
 	if(!req.body.code){
 		res.status(404).json({message: 'no code'});
 		return;
 	}
-	var userLog = await Google.getGoogleAccountFromCode(req.body.code);
-	console.log("despues2");
-	console.log(userLog);
-	console.log("despues3");
+	if(!req.body.pass){
+		res.status(404).json({message: 'no pass'});
+		return;
+	}
+	var userG = await Google.getGoogleAccountFromCode(req.body.code);
 
-	//register(userLog);
-  	res.status(200).json(userLog);
+	User.findOne({ email: userG.email }, function (err, user) {
+		if (err) {res.status(500).send(error); return;}
+	    // Return if user not found in database
+	    if (user) {
+	    	console.log(user);
+			res.status(200).json({authlvl: user.authlvl, token: user.generateJwt()}); // user found
+			return;
+	    }
+	});
+
+	var tokenReg = register(userG, req.body.pass);
+  	res.status(200).json({authlvl: userG.authlvl, token: tokenReg});
   	return;
 });
 
-function register(userLog) {
-  var user = new User();
-
-  user.name = "";
-  user.email = userLog.email;
-
-  //user.setPassword(userLog.password);
-
-  user.save();
+function register(user,pass) {
+  user.setPassword(pass);
   token = user.generateJwt();
+  user.save(error => {
+	if (error) {res.status(500).send(error); return;}
+  });
   return token;
 };
 
-/* GET all users. */
+/* GET all users. */ //Delete in next reviews
 router.get('/users', (req, res) => {
 	User.find({}, (err, users) => {
 		if (err) {res.status(500).send(error); return;}
@@ -96,22 +97,6 @@ router.get('/users/:id', (req, res) => {
 		if (err) {res.status(500).send(error); return;}
 
 		res.status(200).json(user);
-		return;
-	});
-});
-
-/* Create a user. */
-router.post('/users', (req, res) => {
-	let user = new User({
-		email: req.body.email,
-		pass: req.body.pass,
-		authlvl: 1
-	});
-
-	user.save(error => {
-		if (error) {res.status(500).send(error); return;}
-
-		res.status(201).json({message: 'User created successfully'});
 		return;
 	});
 });
