@@ -36,6 +36,7 @@ userSchema.methods.generateJwt = function() {
     email: this.email,
     family_name: this.family_name,
     given_name: this.given_name,
+    picture: this.picture,
     authlvl: this.authlvl,
     exp: parseInt(expiry.getTime() / 1000),
   }, process.env.SECRET_JWT);
