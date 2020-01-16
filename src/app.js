@@ -1,10 +1,12 @@
-var config = require('./config');
+var config = require('./helpers/config');
 var express = require('express');
 var helmet = require('helmet');
 const bodyParser = require('body-parser');
+const Mongo = require("./helpers/mongoConnexion");
 
 //divide routes
-const api = require('./routes/users');
+const usersR = require('./routes/users');
+const loginR = require('./routes/oauth');
 
 // Create an Express web app
 var app = express();
@@ -25,8 +27,16 @@ app.use(function(req, res, next) {
 	next();
 });
 
+//Initialize Mongo DB
+Mongo.connectWithRetry();
+
 // Set our api routes
-app.use('/', api);
+/* usersR listing. */
+app.use('/', usersR);
+/* loginR listing. */
+app.use('/', loginR);
+// Serve folder static resources
+app.use('/assets', express.static('assets')); 
 
 // Create an HTTP server to run our application
 var server = app.listen(process.env.PORT, function () {

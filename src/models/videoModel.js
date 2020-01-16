@@ -7,6 +7,7 @@ const videoSchema = new mongoose.Schema({
   name: { type: String}, //course name.
   url: { type: String}, //statics server url
   duration: { type: Number}, //min or seconds?.
+  class: { type: Number}, // Ordering the videos with upload time.
   thumbnail: { type: String}, //statics server url
   course: { type: Number} //The course of the video.
 });
