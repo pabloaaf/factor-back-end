@@ -5,8 +5,10 @@ const bodyParser = require('body-parser');
 const Mongo = require("./helpers/mongoConnexion");
 
 //divide routes
-const usersR = require('./routes/users');
 const loginR = require('./routes/oauth');
+const usersR = require('./routes/users');
+const coursesR = require('./routes/courses');
+const videosR = require('./routes/videos');
 
 // Create an Express web app
 var app = express();
@@ -31,10 +33,14 @@ app.use(function(req, res, next) {
 Mongo.connectWithRetry();
 
 // Set our api routes
-/* usersR listing. */
-app.use('/', usersR);
 /* loginR listing. */
 app.use('/', loginR);
+/* usersR listing. */
+app.use('/', usersR);
+/* coursesR listing. */
+app.use('/', coursesR);
+/* videosR listing. */
+app.use('/', videosR);
 // Serve folder static resources
 app.use('/assets', express.static('assets')); 
 

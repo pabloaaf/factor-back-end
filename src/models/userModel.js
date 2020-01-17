@@ -2,20 +2,22 @@
 const mongoose = require("mongoose");
 var crypto = require('crypto');
 var jwt = require('jsonwebtoken');
+const ObjectID = require('mongodb').ObjectID;   
 
 // schema
 const userSchema = new mongoose.Schema({
+  _id: { type: Number, unique: true, required: true }, // Google ID (prefered for the number type)
   email: { type: String, unique: true, required: true }, //The user's email address.
   family_name: { type: String}, //The user's last name.
   given_name: { type: String}, //The user's first name.
   locale: { type: String}, //The user's preferred locale.
   picture: { type: String}, //URL of the user's picture image.
   verified_email: { type: Boolean}, //Boolean flag which is true if the email address is verified. Always verified because we only return the user's primary email address.
-  courses: { type: [Number]},
-  authlvl: { type: Number},
+  courses: { type: [String]},
+  authlvl: { type: Number, min: 1, max: 128},
   hash: { type: String},
   salt: { type: String}
-});
+},{collection: 'UserCo'});
 
 userSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -55,5 +57,13 @@ userSchema.methods.generateMinJwt = function() {
   }, process.env.SECRET_JWT);
 };
 
-const User = mongoose.model("User", userSchema);
+/* Delete properties which will not be sent to the client */
+userSchema.methods.minimize = function() {
+ var obj = this.toObject();
+ delete obj.hash;
+ delete obj.salt;
+ return obj;
+}
+
+const User = mongoose.model("User", userSchema, "UserCo");
 module.exports = User;

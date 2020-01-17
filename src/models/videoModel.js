@@ -4,12 +4,12 @@ var jwt = require('jsonwebtoken');
 
 // schema
 const videoSchema = new mongoose.Schema({
-  name: { type: String}, //course name.
+  name: { type: String}, //video name.
   url: { type: String}, //statics server url
   duration: { type: Number}, //min or seconds?.
   class: { type: Number}, // Ordering the videos with upload time.
   thumbnail: { type: String}, //statics server url
-  course: { type: Number} //The course of the video.
+  course: { type: String} //The course of the video.
 });
 
 videoSchema.methods.generateJwt = function() {
