@@ -1,13 +1,13 @@
 // courses.js
 const express = require('express');
 const router = express.Router();
-
+const ObjectID = require('mongodb').ObjectID
 const Course = require("../models/courseModel");
 
 /* GET all courses. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/courses', (req, res) => {
 	Course.find({}, (err, courses) => {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 
 		res.status(200).json(courses);
 		return;
@@ -16,8 +16,12 @@ router.get('/courses', (req, res) => {
 
 /* GET info of an array of course ID. */
 router.post('/courses/id', (req, res) => {
-	Course.find({'_id': { $in: [req.body.id]}}, (err, course) => {
-		if (err) {res.status(500).json(error); return;}
+	let IDs = [];
+	for (var i = 0; i <= req.body.id.length - 1; i++) {
+		IDs[i] = new ObjectID(req.body.id[i]);
+	}
+	Course.find({'_id': { $in: IDs}}, (err, course) => {
+		if (err) {res.status(500).json(err); return;}
 
 		res.status(200).json(course);
 		return;
