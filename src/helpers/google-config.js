@@ -59,11 +59,13 @@ async function getGoogleAccountFromCode(code) {
   // connect to google - need this to get the user's email
   const gooauth = await google.oauth2('v2').userinfo.get({auth: auth});
   // //const gooauth = await plus.people.get({ userId: 'me' });
+
   let lvl = 1;
   if(gooauth.data.hd == 'iit.edu') {
-    lvl = 64;
+    lvl = 63;
   }
   let userG = new User({
+    _id: gooauth.data.id,
     email: gooauth.data.email,
     family_name: gooauth.data.family_name,
     given_name: gooauth.data.given_name,
@@ -79,3 +81,32 @@ module.exports = {
     urlGoogle: urlGoogle,
     getGoogleAccountFromCode: getGoogleAccountFromCode
 };
+
+
+
+/*** Add Mock users ***/
+/*
+  let gooauthM = {
+      id: 123456789123456789123,
+      email: 'prueba@iit.edu',
+      hd: 'iit.edu',
+      family_name: 'Hajek',
+      given_name: 'Jeremy'
+  };
+  let lvl = 1;
+  if(gooauthM.hd == 'iit.edu') {
+    lvl = 63;
+  }
+  let userG = new User({
+    _id: gooauthM.id,
+    email: gooauthM.email,
+    family_name: gooauthM.family_name,
+    given_name: gooauthM.given_name,
+    locale: gooauth.data.locale,
+    picture: gooauth.data.picture,
+    verified_email: gooauth.data.verified_email,
+    authlvl: lvl
+  });
+  return userG;
+}
+*/
