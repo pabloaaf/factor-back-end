@@ -4,6 +4,9 @@ const router = express.Router();
 
 const Video = require("../models/videoModel");
 
+//define the type of upload multer would be doing and pass in its destination, in our case, its a single file with the name photo
+const upload = multer({dest: './'+process.env.DIR+'/'}).single('video');
+
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
 	Video.find({}, (err, videos) => {
@@ -27,5 +30,17 @@ router.get('/videos/:id', (req, res) => {
 /* GET videos of the same course ordered by class number. */
 
 /* POST video. */
+router.post('/videos', function (req, res, next) {
+    let path = '';
+    upload(req, res, function (err) {
+        if (err) {
+          // Error when uploading
+          console.log(err);
+          return res.status(500).send("an Error occured");
+        }
+        path = req.file.path;
+        return res.status(200).json(path); 
+  	});   
+});
 
 module.exports = router;

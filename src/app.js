@@ -3,7 +3,7 @@ var express = require('express');
 var helmet = require('helmet');
 const bodyParser = require('body-parser');
 const Mongo = require("./helpers/mongoConnexion");
-
+const Multer = require('multer');
 //divide routes
 const loginR = require('./routes/oauth');
 const usersR = require('./routes/users');
@@ -42,7 +42,7 @@ app.use('/', coursesR);
 /* videosR listing. */
 app.use('/', videosR);
 // Serve folder static resources
-app.use('/assets', express.static('assets')); 
+app.use('/assets', express.static(process.env.DIR)); 
 
 // Create an HTTP server to run our application
 var server = app.listen(process.env.PORT, function () {
