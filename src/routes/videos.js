@@ -4,9 +4,6 @@ const router = express.Router();
 
 const Video = require("../models/videoModel");
 
-//define the type of upload multer would be doing and pass in its destination, in our case, its a single file with the name photo
-const upload = multer({dest: './'+process.env.DIR+'/'}).single('video');
-
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
 	Video.find({}, (err, videos) => {
@@ -30,17 +27,21 @@ router.get('/videos/:id', (req, res) => {
 /* GET videos of the same course ordered by class number. */
 
 /* POST video. */
-router.post('/videos', function (req, res, next) {
-    let path = '';
-    upload(req, res, function (err) {
-        if (err) {
-          // Error when uploading
-          console.log(err);
-          return res.status(500).send("an Error occured");
-        }
-        path = req.file.path;
-        return res.status(200).json(path); 
-  	});   
-});
+router.post('/videos', function(req, res) {
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.');
+  }
+  console.log(req.files.video); // the uploaded file object
 
+  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+  let classVideo = req.files.video;
+
+  // Use the mv() method to place the file somewhere on your server
+  classVideo.mv('/assets/classes/class-'+Date.now()+'-'+req.files.foo.name, function(err) {
+    if (err)
+      return res.status(500).send(err);
+
+    res.send('File uploaded!');
+  });
+});
 module.exports = router;
