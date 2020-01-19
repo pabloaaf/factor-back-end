@@ -37,10 +37,9 @@ router.post('/videos', function(req, res) {
   let classVideo = req.files.video;
 
   // Use the mv() method to place the file somewhere on your server
-  classVideo.mv('/assets/classes/class-'+Date.now()+'-'+req.files.foo.name, function(err) {
+  classVideo.mv('/factor'+'/assets/classes/class-'+Date.now()+'-'+req.files.video.name, function(err) {
     if (err)
       return res.status(500).send(err);
-
     res.send('File uploaded!');
   });
 });
