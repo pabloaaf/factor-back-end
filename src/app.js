@@ -44,7 +44,7 @@ app.use('/', coursesR);
 /* videosR listing. */
 app.use('/', videosR);
 // Serve folder static resources
-app.use('/assets', express.static('./'+process.env.DIR+'/')); 
+app.use('/assets', express.static('./'+process.env.DIR_STATICS+'/')); 
 
 // Create an HTTP server to run our application
 var server = app.listen(process.env.PORT, function () {
