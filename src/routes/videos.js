@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const Video = require("../models/videoModel");
-
+const Thumbnail = require("../helpers/thumbnail");
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
 	Video.find({}, (err, videos) => {
@@ -27,20 +27,61 @@ router.get('/videos/:id', (req, res) => {
 /* GET videos of the same course ordered by class number. */
 
 /* POST video. */
-router.post('/videos', function(req, res) {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
-  console.log(req.files.video); // the uploaded file object
+router.post('/videos', async (req, res) => {
+	if (!req.files || Object.keys(req.files).length === 0) {
+	    return res.status(400).send('No files were uploaded.');
+	}
+	//console.log(req.files.video);
 
-  // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
-  let classVideo = req.files.video;
+	// The name of the input field
+	let classVideo = req.files.video;
 
-  // Use the mv() method to place the file somewhere on your server
-  classVideo.mv('/factor'+'/assets/classes/class-'+Date.now()+'-'+req.files.video.name, function(err) {
-    if (err)
-      return res.status(500).send(err);
-    res.send('File uploaded!');
-  });
+	// Place the file into the route of the server
+	let urlMV = {
+		serverPath: '/factor/'+process.env.DIR_STATICS, 
+		internPath: '/classes/'+req.body.course+'/', 
+		videoName: 'class-'+Date.now()+'-'+req.files.video.name
+	};
+
+	classVideo.mv(urlMV.serverPath+urlMV.internPath+urlMV.videoName, function(err) {
+	    if (err)
+	      return res.status(500).send(err);
+	    //res.send('File uploaded!');
+	});
+
+	// Save video information into the DB
+	Video.find({'course': req.body.course}, (err, videos) => {
+		if (err) {res.status(500).json(err); return;}
+
+		//create Thumbnail
+		Thumbnail.extract(
+			urlMV.serverPath+urlMV.internPath+urlMV.videoName, 
+			urlMV.serverPath+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png', 
+			'00:00:22', '300x225', function(err,stdout){
+				if(err) {console.log(err);res.status(500).json(err); return;}
+				console.log('snapshot saved');
+				console.log(stdout);
+		});
+
+		// Retreave data
+		let classVideoNum = videos.length;
+		let video = new Video({
+		    name: req.files.video.name,
+		    url: urlMV.internPath,
+		    duration: 0, //time video
+		    class: classVideoNum,
+		    thumbnail: process.env.DIR_STATICS+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png',
+		    course: req.body.course
+		});
+	  	video.save((error,obj) => {
+			if (error) {res.status(500).json(error); return;}
+
+			// Save video duration
+			Thumbnail.duration(urlMV.serverPath+urlMV.internPath+urlMV.videoName, obj._id);
+
+			res.status(200).json({message: 'video saved', token: video});
+			return;
+	  	});
+	});
 });
 module.exports = router;

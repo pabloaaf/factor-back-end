@@ -8,7 +8,7 @@ const courseSchema = new mongoose.Schema({
   number: { type: Number}, //Number of identification human-redable.
   professor: { type: String} //The professor of the course.
   // future section, capacity of students
-},{collection: 'Course'});
+},{collection: 'CourseC'});
 
 courseSchema.methods.generateJwt = function() {
   var expiry = new Date();
@@ -23,5 +23,5 @@ courseSchema.methods.generateJwt = function() {
   }, process.env.SECRET_JWT);
 };
 
-const Course = mongoose.model("Course", courseSchema, "Course");
+const Course = mongoose.model("Course", courseSchema, "CourseC");
 module.exports = Course;

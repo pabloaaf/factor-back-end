@@ -6,11 +6,11 @@ var jwt = require('jsonwebtoken');
 const videoSchema = new mongoose.Schema({
   name: { type: String}, //video name.
   url: { type: String}, //statics server url
-  duration: { type: Number}, //min or seconds?.
+  duration: { type: String}, //min or seconds?.
   class: { type: Number}, // Ordering the videos with upload time.
   thumbnail: { type: String}, //statics server url
   course: { type: String} //The course of the video.
-});
+},{collection: 'VideoC'});
 
 videoSchema.methods.generateJwt = function() {
   var expiry = new Date();
@@ -28,5 +28,5 @@ videoSchema.methods.generateJwt = function() {
   }, process.env.SECRET_JWT);
 };
 
-const Video = mongoose.model("Video", videoSchema);
+const Video = mongoose.model("Video", videoSchema, "VideoC");
 module.exports = Video;

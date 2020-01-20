@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   authlvl: { type: Number, min: 1, max: 128},
   hash: { type: String},
   salt: { type: String}
-},{collection: 'UserCo'});
+},{collection: 'UserCol'});
 
 userSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -65,5 +65,5 @@ userSchema.methods.minimize = function() {
  return obj;
 }
 
-const User = mongoose.model("User", userSchema, "UserCo");
+const User = mongoose.model("User", userSchema, "UserCol");
 module.exports = User;
