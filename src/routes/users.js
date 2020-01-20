@@ -32,7 +32,16 @@ router.post('/users/id', (req, res) => {
 	User.find({'_id': { $in: req.body.id}}).select("family_name given_name").exec(function (err, profs) {
 		if (err) {res.status(500).json(err); return;}
 		if (profs) {
-			res.status(200).json(profs);
+			let listProfs=[];
+			for (var i = 0; i <= req.body.id.length - 1; i++) {
+				for (var j = 0; j <= req.body.id.length - 1; j++) {
+					if(profs[j]._id == req.body.id[i]){
+						listProfs.push(profs[j]);
+						break;
+					}
+				}
+			}
+			res.status(200).json(listProfs);
 			return;
 		}
 	});
