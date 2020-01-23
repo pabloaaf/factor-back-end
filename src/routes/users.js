@@ -1,7 +1,7 @@
 // users.js
 const express = require('express');
 const router = express.Router();
-const ObjectID = require('mongodb').ObjectID;   
+// const ObjectID = require('mongodb').ObjectID;   
 
 const User = require("../models/userModel");
 
@@ -55,6 +55,7 @@ router.post('/users/', (req, res) => {
 			res.status(200).json({message: 'course saved into user', user:user});
 			return;
 		}
+		return;
 	});
 });
 

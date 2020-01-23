@@ -1,9 +1,11 @@
 // videos.js
 const express = require('express');
 const router = express.Router();
+const ObjectID = require('mongodb').ObjectID;   
 
 const Video = require("../models/videoModel");
 const Thumbnail = require("../helpers/thumbnail");
+
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
 	Video.find({}, (err, videos) => {
@@ -25,6 +27,28 @@ router.get('/videos/:id', (req, res) => {
 });
 
 /* GET videos of the same course ordered by class number. */
+router.post('/videos/course', (req, res) => {
+	Video.find({'course': { $in: req.body.course}}).select("name duration thumbnail class course").exec(function(err, videos) {
+		if (err) {res.status(500).send(error); return;}
+		if(videos){
+			res.status(200).json(videos);
+			return;
+		}
+		return;
+	});
+});
+
+/* GET video information. */
+router.post('/videos/id', (req, res) => {
+	Video.findById(new ObjectID(req.body.id), (err, video) => {
+		if (err) {res.status(500).send(error); return;}
+		if(video){
+			res.status(200).json(video);
+			return;
+		}
+		return;
+	});
+});
 
 /* POST video. */
 router.post('/videos', async (req, res) => {
@@ -44,44 +68,46 @@ router.post('/videos', async (req, res) => {
 	};
 
 	classVideo.mv(urlMV.serverPath+urlMV.internPath+urlMV.videoName, function(err) {
-	    if (err)
-	      return res.status(500).send(err);
+	    if (err) return res.status(500).send(err);
 	    //res.send('File uploaded!');
 	});
 
 	// Save video information into the DB
 	Video.find({'course': req.body.course}, (err, videos) => {
 		if (err) {res.status(500).json(err); return;}
+		if(videos){
+			//create Thumbnail
+			Thumbnail.extract(
+				urlMV.serverPath+urlMV.internPath+urlMV.videoName, 
+				urlMV.serverPath+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png', 
+				'00:00:22', '300x225', function(err,stdout){
+					if(err) {console.log(err);res.status(500).json(err); return;}
+					console.log('snapshot saved');
+					console.log(stdout);
+			});
 
-		//create Thumbnail
-		Thumbnail.extract(
-			urlMV.serverPath+urlMV.internPath+urlMV.videoName, 
-			urlMV.serverPath+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png', 
-			'00:00:22', '300x225', function(err,stdout){
-				if(err) {console.log(err);res.status(500).json(err); return;}
-				console.log('snapshot saved');
-				console.log(stdout);
-		});
+			// Retreave data
+			let classVideoNum = videos.length;
+			let video = new Video({
+			    name: req.files.video.name,
+			    url: urlMV.internPath,
+			    duration: 0, //time video
+			    class: classVideoNum,
+			    thumbnail: process.env.DIR_STATICS+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png',
+			    course: req.body.course
+			});
+		  	video.save((error,obj) => {
+				if (error) {res.status(500).json(error); return;}
 
-		// Retreave data
-		let classVideoNum = videos.length;
-		let video = new Video({
-		    name: req.files.video.name,
-		    url: urlMV.internPath,
-		    duration: 0, //time video
-		    class: classVideoNum,
-		    thumbnail: process.env.DIR_STATICS+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png',
-		    course: req.body.course
-		});
-	  	video.save((error,obj) => {
-			if (error) {res.status(500).json(error); return;}
+				// Save video duration
+				Thumbnail.duration(urlMV.serverPath+urlMV.internPath+urlMV.videoName, obj._id);
 
-			// Save video duration
-			Thumbnail.duration(urlMV.serverPath+urlMV.internPath+urlMV.videoName, obj._id);
-
-			res.status(200).json({message: 'video saved', token: video});
-			return;
-	  	});
+				res.status(200).json({message: 'video saved', token: video});
+				return;
+		  	});
+		  	return;
+		}
+		return;
 	});
 });
 module.exports = router;
