@@ -13,11 +13,11 @@ const userSchema = new mongoose.Schema({
   locale: { type: String}, //The user's preferred locale.
   picture: { type: String}, //URL of the user's picture image.
   verified_email: { type: Boolean}, //Boolean flag which is true if the email address is verified. Always verified because we only return the user's primary email address.
-  courses: { type: [String]},
+  coursesID: { type: [String]},
   authlvl: { type: Number, min: 1, max: 128},
   hash: { type: String},
   salt: { type: String}
-},{collection: 'UserCol'});
+},{collection: 'UserColl'});
 
 userSchema.methods.setPassword = function(password){
   this.salt = crypto.randomBytes(16).toString('hex');
@@ -65,5 +65,5 @@ userSchema.methods.minimize = function() {
  return obj;
 }
 
-const User = mongoose.model("User", userSchema, "UserCol");
+const User = mongoose.model("User", userSchema, "UserColl");
 module.exports = User;

@@ -6,9 +6,9 @@ var jwt = require('jsonwebtoken');
 const courseSchema = new mongoose.Schema({
   name: { type: String}, //course name.
   number: { type: Number}, //Number of identification human-redable.
-  professor: { type: String} //The professor of the course.
+  professorID: { type: String} //The professor of the course.
   // future section, capacity of students
-},{collection: 'CourseC'});
+},{collection: 'CourseCo'});
 
 courseSchema.methods.generateJwt = function() {
   var expiry = new Date();
@@ -23,5 +23,5 @@ courseSchema.methods.generateJwt = function() {
   }, process.env.SECRET_JWT);
 };
 
-const Course = mongoose.model("Course", courseSchema, "CourseC");
+const Course = mongoose.model("Course", courseSchema, "CourseCo");
 module.exports = Course;
