@@ -14,7 +14,7 @@ router.get('/oauth', async (req, res) => {
 router.post('/login', (req, res) => {
 	//console.log(req.body.email);
 	User.findOne({ email: req.body.email }, function (err, user) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 	    // Return if user not found in database
 	    if (!user) {res.status(200).json({authlvl: 0, err: "Proceding to register the user"}); return;}
 	    // Return if password is wrong
@@ -40,7 +40,7 @@ router.post('/callback', async (req, res) => {
 	var userG = await Google.getGoogleAccountFromCode(req.body.code);
 
 	User.findOne({ email: userG.email }, function (err, user) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 	    // Return if user not found in database
 	    if (user) {
 	    	//console.log(user);

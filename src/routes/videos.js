@@ -9,7 +9,7 @@ const Thumbnail = require("../helpers/thumbnail");
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
 	Video.find({}, (err, videos) => {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 
 		res.status(200).json(videos);
 		return;
@@ -19,7 +19,7 @@ router.get('/videos', (req, res) => {
 /* GET one video. */
 router.get('/videos/:id', (req, res) => {
 	Video.findById(req.params.id, (err, video) => {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 
 		res.status(200).json({token:video.generateJwt()});
 		return;
@@ -29,7 +29,7 @@ router.get('/videos/:id', (req, res) => {
 /* GET videos of the same course ordered by class number. */
 router.post('/videos/course', (req, res) => {
 	Video.find({'course': { $in: req.body.course}}).select("name duration thumbnail class course").exec(function(err, videos) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 		if(videos){
 			res.status(200).json(videos);
 			return;
@@ -41,7 +41,7 @@ router.post('/videos/course', (req, res) => {
 /* GET video information. */
 router.post('/videos/id', (req, res) => {
 	Video.findById(new ObjectID(req.body.id), (err, video) => {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 		if(video){
 			res.status(200).json(video);
 			return;

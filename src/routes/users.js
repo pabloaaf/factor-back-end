@@ -8,7 +8,7 @@ const User = require("../models/userModel");
 /* GET all users. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/users', (req, res) => {
 	User.find({}).select("-hash -salt").exec(function (err, users) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 		if (users) {
 			res.status(200).json(users);
 			return;
@@ -19,8 +19,11 @@ router.get('/users', (req, res) => {
 /* GET one user. */
 router.get('/users/:id', (req, res) => {
 	User.findById(req.params.id).select("-hash -salt").exec(function (err, user) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 		if (user) {
+			if(!user.courses) {
+				user.courses = [];
+			}
 			res.status(200).json(user);
 			return;
 		}
@@ -50,7 +53,7 @@ router.post('/users/id', (req, res) => {
 /* POST add course to user. */
 router.post('/users/', (req, res) => {
 	User.findOneAndUpdate({_id: req.body.user}, {$push: {courses: req.body.course}}).select("-hash -salt").exec(function (err, user) {
-		if (err) {res.status(500).send(error); return;}
+		if (err) {res.status(500).send(err); return;}
 		if (user) {
 			res.status(200).json({message: 'course saved into user', user:user});
 			return;

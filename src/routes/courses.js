@@ -20,7 +20,11 @@ router.get('/courses', (req, res) => {
 /* GET info of an array of course ID. */
 router.post('/courses/id', (req, res) => {
 	let IDs = [];
-	for (var i = 0; i <= req.body.id.length - 1; i++) {
+	let numIDs = 0;
+	if(req.body.id) {
+		numIDs = req.body.id.length;
+	}
+	for (var i = 0; i <= numIDs - 1; i++) {
 		IDs[i] = new ObjectID(req.body.id[i]);
 	}
 	Course.find({'_id': { $in: IDs}}, (err, course) => {
@@ -59,7 +63,7 @@ function createFolder(folderPath){
     let path = root + folderPath + "/";
     console.log(path);
     fs.mkdir(path, { recursive: true }, function(event, err){
-        if (err) {res.status(500).json(error); return;}
+        if (err) {res.status(500).json(err); return;}
         if (event === null) {
             console.log("Created a folder at " + path);
         }
