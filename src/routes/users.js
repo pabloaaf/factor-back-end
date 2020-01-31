@@ -52,7 +52,7 @@ router.post('/users/id', (req, res) => {
 
 /* POST add course to user. */
 router.post('/users/', (req, res) => {
-	User.findOneAndUpdate({_id: req.body.user}, {$push: {courses: req.body.course}}).select("-hash -salt").exec(function (err, user) {
+	User.findOneAndUpdate({_id: req.body.user}, {$push: {coursesID: req.body.course}}).select("-hash -salt").exec(function (err, user) {
 		if (err) {res.status(500).send(err); return;}
 		if (user) {
 			res.status(200).json({message: 'course saved into user', user:user});

@@ -40,7 +40,7 @@ router.post('/courses', (req, res) => {
 	let course = new Course({
 	    name: req.body.name,
 	    number: req.body.number,
-	    professor: req.body.professor
+	    professorID: req.body.professor
 	});
   	course.save(error => {
 		if (error) {res.status(500).json(error); return;}
@@ -53,6 +53,7 @@ router.post('/courses', (req, res) => {
 	//});
 	createFolder(process.env.DIR_STATICS+'/classes/'+course._id);
 	createFolder(process.env.DIR_STATICS+'/pictures/'+course._id);
+	createFolder(process.env.DIR_STATICS+'/audios/'+course._id);
 
   	res.status(200).json({message: 'course saved', token: course});
 	return;

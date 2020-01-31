@@ -23,11 +23,23 @@ function duration(path, videoID) {
 	let command = "ffmpeg -i "+ path +" 2>&1 | grep Duration | cut -d \' \' -f 4 | sed s/,//";
 	console.log(command);
     return exec(command, function( err, stdout ) {
+        console.log(stdout);
 	    Video.findOneAndUpdate({_id: videoID}, {$push: {duration: stdout}});
+    });
+}
+
+function extractAudio(path, destPath, videoID) {
+    //ffmpeg -i video.mp4 -acodec pcm_s16le -ac 1 -ar 8000 audio.wav
+    let command = "ffmpeg -i "+ path +" -acodec pcm_s16le -ac 1 -ar 8000 "+ destPath;
+    console.log(command);
+    return exec(command, function( err, stdout ) {
+        console.log(stdout);
+        //Video.findOneAndUpdate({_id: videoID}, {$push: {duration: stdout}});
     });
 }
 
 module.exports = {
 	extract: extract,
-	duration: duration
+	duration: duration,
+    extractAudio: extractAudio
 };

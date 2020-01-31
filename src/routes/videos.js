@@ -28,7 +28,7 @@ router.get('/videos/:id', (req, res) => {
 
 /* GET videos of the same course ordered by class number. */
 router.post('/videos/course', (req, res) => {
-	Video.find({'course': { $in: req.body.course}}).select("name duration thumbnail class course").exec(function(err, videos) {
+	Video.find({'courseID': { $in: req.body.course}}).select("name duration thumbnail class courseID").exec(function(err, videos) {
 		if (err) {res.status(500).send(err); return;}
 		if(videos){
 			res.status(200).json(videos);
@@ -57,31 +57,38 @@ router.post('/videos', async (req, res) => {
 	}
 	//console.log(req.files.video);
 
-	// The name of the input field
+	// The input field
 	let classVideo = req.files.video;
 
+	// Verify file .mp4
+	if(classVideo.name.split('.').slice(-1)[0].toLowerCase() != 'mp4'){
+		return res.status(500).send('file type not mp4');
+	}
+
 	// Place the file into the route of the server
-	let urlMV = {
-		serverPath: '/factor/'+process.env.DIR_STATICS, 
-		internPath: '/classes/'+req.body.course+'/', 
-		videoName: 'class-'+Date.now()+'-'+req.files.video.name
+	let urlCTA = {
+		serverPath: '/'+process.env.DOCKER_FOLDER+'/'+process.env.DIR_STATICS, 
+		internCPath: '/classes/'+req.body.course+'/', 
+		internTPath: '/pictures/'+req.body.course+'/', 
+		internAPath: '/audios/'+req.body.course+'/', 
+		finalName: 'class-'+Date.now()+'-'+classVideo.name.split('.')[0]
 	};
 
-	classVideo.mv(urlMV.serverPath+urlMV.internPath+urlMV.videoName, function(err) {
+	classVideo.mv(urlCTA.serverPath+urlCTA.internCPath+urlCTA.finalName+'.mp4', function(err) {
 	    if (err) return res.status(500).send(err);
 	    //res.send('File uploaded!');
 	});
 
 	// Save video information into the DB
-	Video.find({'course': req.body.course}, (err, videos) => {
+	Video.find({'courseID': req.body.course}, (err, videos) => {
 		if (err) {res.status(500).json(err); return;}
 		if(videos){
-			//create Thumbnail
+			// Create Thumbnail
 			Thumbnail.extract(
-				urlMV.serverPath+urlMV.internPath+urlMV.videoName, 
-				urlMV.serverPath+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png', 
+				urlCTA.serverPath+urlCTA.internCPath+urlCTA.finalName+'.mp4', 
+				urlCTA.serverPath+urlCTA.internTPath+urlCTA.finalName+'.png', 
 				'00:00:22', '300x225', function(err,stdout){
-					if(err) {console.log(err);res.status(500).json(err); return;}
+					if(err) {console.log(err);return;}//res.status(500).json(err); return;}
 					console.log('snapshot saved');
 					console.log(stdout);
 			});
@@ -90,17 +97,20 @@ router.post('/videos', async (req, res) => {
 			let classVideoNum = videos.length;
 			let video = new Video({
 			    name: req.files.video.name,
-			    url: urlMV.internPath,
+			    url: process.env.DIR_STATICS+urlCTA.internCPath+urlCTA.finalName+'.mp4',
 			    duration: 0, //time video
 			    class: classVideoNum,
-			    thumbnail: process.env.DIR_STATICS+'/pictures/'+req.body.course+'/'+urlMV.videoName.split('.')[0]+'.png',
-			    course: req.body.course
+			    thumbnail: process.env.DIR_STATICS+urlCTA.internTPath+urlCTA.finalName+'.png',
+			    courseID: req.body.course
 			});
 		  	video.save((error,obj) => {
 				if (error) {res.status(500).json(error); return;}
 
 				// Save video duration
-				Thumbnail.duration(urlMV.serverPath+urlMV.internPath+urlMV.videoName, obj._id);
+				Thumbnail.duration(urlCTA.serverPath+urlCTA.internCPath+urlCTA.finalName+'.mp4', obj._id);
+
+				// Save audio best quality ==> wav from video
+				Thumbnail.extractAudio(urlCTA.serverPath+urlCTA.internCPath+urlCTA.finalName+'.mp4', urlCTA.serverPath+urlCTA.internAPath+urlCTA.finalName+'.wav', obj._id);
 
 				res.status(200).json({message: 'video saved', token: video});
 				return;
