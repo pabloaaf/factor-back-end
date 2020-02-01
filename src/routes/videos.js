@@ -28,7 +28,8 @@ router.get('/videos/:id', (req, res) => {
 
 /* GET videos of the same course ordered by class number. */
 router.post('/videos/course', (req, res) => {
-	Video.find({'courseID': { $in: req.body.course}}).select("name duration thumbnail class courseID").exec(function(err, videos) {
+	//console.log(req.body.courses);
+	Video.find({'courseID': { $in: req.body.courses}}).select("name duration thumbnail class courseID").exec(function(err, videos) {
 		if (err) {res.status(500).send(err); return;}
 		if(videos){
 			res.status(200).json(videos);
