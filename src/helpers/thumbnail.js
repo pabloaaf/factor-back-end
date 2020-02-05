@@ -34,7 +34,7 @@ function extractAudio(path, destPath, videoID) {
     console.log(command);
     return exec(command, function( err, stdout ) {
         console.log(stdout);
-        //Video.findOneAndUpdate({_id: videoID}, {$push: {duration: stdout}});
+        Video.findOneAndUpdate({_id: videoID}, {$push: {duration: stdout}});
     });
 }
 

@@ -4,25 +4,25 @@ var jwt = require('jsonwebtoken');
 
 // schema
 const itemSchema = new mongoose.Schema({
-  start_time: { type: String}, //course name.
-  end_time: { type: String}, //Number of identification human-redable.
-  alternatives: { [confidence: { type: String},content: { type: String}]},
-  type: { type: String}
+    start_time: { type: String}, //course name.
+    end_time: { type: String}, //Number of identification human-redable.
+    alternatives: { [confidence: { type: String},content: { type: String}]},
+    type: { type: String}
 },{collection: 'itemC'});
 mongoose.model("item", itemSchema, "itemC");
 
 // schema
 const resultSchema = new mongoose.Schema({
-  transcripts: { transcript: { type: String}}, //course name.
-  items: { [type: mongoose.Schema.Type.ObjectId, ref: 'item']} //Number of identification human-redable.
+    transcripts: { transcript: { type: String}}, //course name.
+    items: { [type: mongoose.Schema.Type.ObjectId, ref: 'item']} //Number of identification human-redable.
 },{collection: 'resultC'});
 mongoose.model("result", resultSchema, "resultC");
 
 // schema
 const transcriptSchema = new mongoose.Schema({
-  jobName: { type: String}, //course name.
-  accountID: { type: Number}, //Number of identification human-redable.
-  results: { type: mongoose.Schema.Type.ObjectId, ref: 'result'} //The professor of the course.
+    jobName: { type: String}, //course name.
+    accountID: { type: Number}, //Number of identification human-redable.
+    results: { type: mongoose.Schema.Type.ObjectId, ref: 'result'} //The professor of the course.
 },{collection: 'TranscriptC'});
 
 /*transcriptSchema.methods.generateJwt = function() {

@@ -55,12 +55,12 @@ router.post('/callback', async (req, res) => {
 });
 
 function register(user,pass) {
-  user.setPassword(pass);
-  token = user.generateJwt();
-  user.save(error => {
-	if (error) {res.status(500).send(error); return;}
-  });
-  return token;
+	user.setPassword(pass);
+	token = user.generateJwt();
+	user.save(error => {
+		if (error) {res.status(500).send(error); return;}
+	});
+	return token;
 };
 
 module.exports = router;
