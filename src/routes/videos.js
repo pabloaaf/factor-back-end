@@ -51,6 +51,27 @@ router.post('/videos/id', (req, res) => {
 	});
 });
 
+/* PUT video information. */
+router.put('/videos/id', (req, res) => {
+	Video.findById(new ObjectID(req.body.id), (err, video) => {
+		if (err) {res.status(500).send(err); return;}
+		if(video){
+			let course = await Course.findById(new ObjectID(req.body.course));
+			if(course) {
+				video.courseID = req.body.course;
+			}
+			if(video.name != req.body.name) {
+				video.name = req.body.name;
+			}
+			video.save();
+
+			res.status(200).json(video);
+			return;
+		}
+		return;
+	});
+});
+
 /* POST video. */
 router.post('/videos', async (req, res) => {
 	if (!req.files || Object.keys(req.files).length === 0) {
