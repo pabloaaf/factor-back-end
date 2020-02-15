@@ -1,45 +1,51 @@
 // Transcript.Model.js
 const mongoose = require("mongoose");
 var jwt = require('jsonwebtoken');
+const ObjectID = require('mongodb').ObjectID;   
 
 // schema
 const itemSchema = new mongoose.Schema({
-    start_time: { type: String}, //course name.
-    end_time: { type: String}, //Number of identification human-redable.
-    alternatives: { [confidence: { type: String},content: { type: String}]},
+    start_time: { type: String}, 
+    end_time: { type: String}, 
+    alternatives: [{ confidence: { type: String},content: { type: String}}],
     type: { type: String}
-},{collection: 'itemC'});
-mongoose.model("item", itemSchema, "itemC");
+},{collection: 'itemCol'});
+const Item = mongoose.model("item", itemSchema, "itemCol");
 
 // schema
 const resultSchema = new mongoose.Schema({
-    transcripts: { transcript: { type: String}}, //course name.
-    items: { [type: mongoose.Schema.Type.ObjectId, ref: 'item']} //Number of identification human-redable.
-},{collection: 'resultC'});
-mongoose.model("result", resultSchema, "resultC");
+    transcripts: { type: String}, 
+    item: [{type: mongoose.Schema.Types.ObjectId, ref: 'item'}] 
+},{collection: 'resultCol'});
+const Result = mongoose.model("result", resultSchema, "resultCol");
 
 // schema
 const transcriptSchema = new mongoose.Schema({
-    jobName: { type: String}, //course name.
-    accountID: { type: Number}, //Number of identification human-redable.
-    results: { type: mongoose.Schema.Type.ObjectId, ref: 'result'} //The professor of the course.
-},{collection: 'TranscriptC'});
+    jobName: { type: String}, 
+    accountID: { type: Number}, 
+    result: { type: mongoose.Schema.Types.ObjectId, ref: 'result'}, 
+    videoID: { type: String}
+},{collection: 'TranscriptCol'});
 
 /*transcriptSchema.methods.generateJwt = function() {
-  var expiry = new Date();
-  expiry.setDate(expiry.getDate() + 7);
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + 7);
 
-  return jwt.sign({
-    _id: this._id,
-    name: this.name,
-    number: this.number,
-    professor: this.professor,
-    exp: parseInt(expiry.getTime() / 1000)
-  }, process.env.SECRET_JWT);
+    return jwt.sign({
+      _id: this._id,
+      name: this.name,
+      number: this.number,
+      professor: this.professor,
+      exp: parseInt(expiry.getTime() / 1000)
+    }, process.env.SECRET_JWT);
 };*/
 
-const Transcript = mongoose.model("Transcript", transcriptSchema, "TranscriptC");
-module.exports = Transcript;
+const Transcript = mongoose.model("Transcript", transcriptSchema, "TranscriptCol");
+module.exports = {
+    Transcript: Transcript,
+    Result: Result,
+    Item: Item
+};
 
 
 // extract references to submodels
