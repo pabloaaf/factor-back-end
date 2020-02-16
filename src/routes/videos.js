@@ -6,6 +6,7 @@ const ObjectID = require('mongodb').ObjectID;
 const Video = require("../models/videoModel");
 const TC = require("../models/transcriptModel");
 const Thumbnail = require("../helpers/thumbnail");
+const AWSTranscribe = require("../helpers/aws-transcribe");
 
 /* GET all videos. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/videos', (req, res) => {
@@ -133,8 +134,21 @@ router.post('/videos', async (req, res) => {
 				// Save audio best quality ==> wav from video
 				Thumbnail.extractAudio(urlCTA.serverPath+urlCTA.internCPath+urlCTA.finalName+'.mp4', urlCTA.serverPath+urlCTA.internAPath+urlCTA.finalName+'.wav', obj._id);
 
-				res.status(200).json({message: 'video saved', token: video});
-				return;
+				Promise.resolve(urlCTA.serverPath+urlCTA.internAPath+urlCTA.finalName)
+				.then(filePath => {
+					console.log("Send audio to S3 bucket");
+					return AWSTranscribe.storeAudioToBucket(filePath);
+				}).then(name => {
+					console.log("Transcribe audio to S3 bucket");
+					return AWSTranscribe.transcribeAudio(name);
+				}).then(transcription_result => {
+					console.log("Transcribe audio to S3 bucket");
+					return AWSTranscribe.retrieveTranscribedAudio(transcription_result);
+				}).then(transcripts => {
+					//resolve(transcripts);
+					res.status(200).json({message: 'video saved', token: video});
+					return;
+				}).catch(err => console.log(err));
 		  	});
 		  	return;
 		}

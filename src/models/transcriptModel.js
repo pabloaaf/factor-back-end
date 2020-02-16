@@ -14,7 +14,7 @@ const Item = mongoose.model("item", itemSchema, "itemCol");
 
 // schema
 const resultSchema = new mongoose.Schema({
-    transcripts: { type: String}, 
+    transcripts: { type: String},
     item: [{type: mongoose.Schema.Types.ObjectId, ref: 'item'}] 
 },{collection: 'resultCol'});
 const Result = mongoose.model("result", resultSchema, "resultCol");
