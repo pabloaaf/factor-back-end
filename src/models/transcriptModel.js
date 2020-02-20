@@ -25,7 +25,7 @@ const transcriptSchema = new mongoose.Schema({
     accountID: { type: Number}, 
     result: { type: mongoose.Schema.Types.ObjectId, ref: 'result'}, 
     videoID: { type: String}
-},{collection: 'TranscriptCol'});
+},{collection: 'TranscriptCol'}); //create incomplete field before job finish
 
 /*transcriptSchema.methods.generateJwt = function() {
     var expiry = new Date();
