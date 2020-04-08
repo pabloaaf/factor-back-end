@@ -6,10 +6,14 @@ COPY --from=ffmpeg / /
 
 #send node to base route
 WORKDIR /factor
-ADD . /factor
+ADD ./package* /factor
 
 #update config
 RUN npm install
+
+#add rest of the project
+COPY ./src/ /factor/src
+COPY ./.env /factor
 
 #outside port
 EXPOSE 3000

@@ -1,0 +1,158 @@
+// exampleTranscriptOutput
+
+express_1   | Extract duration
+express_1   | //factor/assets/classes/5e4a3b49088d370011663aa6/class-1582221900139-528_1-21-2020_Trim.mp4
+express_1   | 5e4eca4c34cdfc0011bede52
+express_1   | (node:17) DeprecationWarning: Mongoose: `findOneAndUpdate()` and `findOneAndDelete()` without the `useFindAndModify` option set to false are deprecated. See: https://mongoosejs.com/docs/deprecations.html#-findandmodify-
+express_1   | Extract audio
+express_1   | //factor/assets/classes/5e4a3b49088d370011663aa6/class-1582221900139-528_1-21-2020_Trim.mp4
+express_1   | //factor/assets/audios/5e4a3b49088d370011663aa6/class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | 5e4eca4c34cdfc0011bede52
+express_1   | snapshot saved
+express_1   |
+express_1   | Send audio to S3 bucket
+express_1   | //factor/assets/audios/5e4a3b49088d370011663aa6/class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | //factor/assets/audios/5e4a3b49088d370011663aa6/class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | {
+express_1   |   ETag: '"ee7189938954977957b7a93076154b8a"',
+express_1   |   VersionId: 'fnp5LEZWtoQet29qXwT3WMOeNoiHibbi',
+express_1   |   Location: 'https://projectfactorawsbucketv.s3.amazonaws.com/class-1582221900139-528_1-21-2020_Trim.wav',
+express_1   |   key: 'class-1582221900139-528_1-21-2020_Trim.wav',
+express_1   |   Key: 'class-1582221900139-528_1-21-2020_Trim.wav',
+express_1   |   Bucket: 'projectfactorawsbucketv'
+express_1   | }
+express_1   | Transcribe job
+express_1   | class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | class-1582221900139-528_1-21-2020_Trim.wav
+express_1   | class-1582221900139-5281-21-2020Trim.wav
+express_1   | class-1582221900139-5281-21-2020Trim.wav
+express_1   | Retrieve audio
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'IN_PROGRESS',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z
+express_1   |   }
+express_1   | }
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'IN_PROGRESS',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     Transcript: {},
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z,
+express_1   |     Settings: { ChannelIdentification: false, ShowAlternatives: false }
+express_1   |   }
+express_1   | }
+express_1   | Still waiting
+express_1   | IN_PROGRESS
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'IN_PROGRESS',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     Transcript: {},
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z,
+express_1   |     Settings: { ChannelIdentification: false, ShowAlternatives: false }
+express_1   |   }
+express_1   | }
+express_1   | Still waiting
+express_1   | IN_PROGRESS
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'IN_PROGRESS',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     Transcript: {},
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z,
+express_1   |     Settings: { ChannelIdentification: false, ShowAlternatives: false }
+express_1   |   }
+express_1   | }
+express_1   | Still waiting
+express_1   | IN_PROGRESS
+
+
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'IN_PROGRESS',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     Transcript: {},
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z,
+express_1   |     Settings: { ChannelIdentification: false, ShowAlternatives: false }
+express_1   |   }
+express_1   | }
+express_1   | Still waiting
+express_1   | IN_PROGRESS
+express_1   | {
+express_1   |   TranscriptionJob: {
+express_1   |     TranscriptionJobName: 'jobclass-1582221900139-5281-21-2020Trim.wav',
+express_1   |     TranscriptionJobStatus: 'COMPLETED',
+express_1   |     LanguageCode: 'en-US',
+express_1   |     MediaSampleRateHertz: 8000,
+express_1   |     MediaFormat: 'wav',
+express_1   |     Media: {
+express_1   |       MediaFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/class-1582221900139-528_1-21-2020_Trim.wav'
+express_1   |     },
+express_1   |     Transcript: {
+express_1   |       TranscriptFileUri: 'https://s3.amazonaws.com/projectfactorawsbucketv/jobclass-1582221900139-5281-21-2020Trim.wav.json'
+express_1   |     },
+express_1   |     StartTime: 2020-02-20T18:05:04.095Z,
+express_1   |     CreationTime: 2020-02-20T18:05:04.072Z,
+express_1   |     CompletionTime: 2020-02-20T18:08:01.921Z,
+express_1   |     Settings: { ChannelIdentification: false, ShowAlternatives: false }
+express_1   |   }
+express_1   | }
+express_1   | Still waiting
+express_1   | COMPLETED
+express_1   | Store Transcripts
+express_1   | https://s3.amazonaws.com/projectfactorawsbucketv/jobclass-1582221900139-5281-21-2020Trim.wav.json
+express_1   | Loaded 74820 bytes
+express_1   | {
+express_1   |   AcceptRanges: 'bytes',
+express_1   |   LastModified: 2020-02-20T18:08:02.000Z,
+express_1   |   ContentLength: 74820,
+express_1   |   ETag: '"6ae1c95466e4b6ff694dd04b4bab668c"',
+express_1   |   VersionId: 'vkMV52XrGVkeTVI8y.w3SZVXKG.XaJ_w',
+express_1   |   ContentType: 'binary/octet-stream',
+express_1   |   ServerSideEncryption: 'AES256',
+express_1   |   Metadata: {},
+express_1   |   Body: <Buffer 7b 22 6a 6f 62 4e 61 6d 65 22 3a 22 6a 6f 62 63 6c 61 73 73 2d 31 35 38 32 32 32 31 39 30 30 31 33 39 2d 35 32 38 31 2d 32 31 2d 32 30 32 30 54 72 69 ... 74770 more bytes>
+express_1   | }
+express_1   | [ { confidence: '0.5425', content: 'alrighty' } ]
+express_1   | finalizado
+angular_1   | 10.100.0.2 - - [20/Feb/2020:18:08:47 +0000] "GET /en/prof/index HTTP/1.1" 304 0 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
+angular_1   | 10.100.0.2 - - [20/Feb/2020:18:08:47 +0000] "GET /en/assets/favicon-iit.ico HTTP/1.1" 200 894 "http://192.168.1.125/en/prof/index" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"
+angular_1   | 10.100.0.2 - - [20/Feb/2020:18:12:33 +0000] "GET /en/prof/ HTTP/1.1" 200 586 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36"

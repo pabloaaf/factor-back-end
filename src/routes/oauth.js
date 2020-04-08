@@ -50,6 +50,7 @@ router.post('/callback', async (req, res) => {
 	});
 
 	var tokenReg = register(userG, req.body.pass);
+	if(!tokenReg) res.status(500);
   	res.status(200).json({authlvl: userG.authlvl, token: tokenReg});
   	return;
 });
@@ -58,7 +59,7 @@ function register(user,pass) {
 	user.setPassword(pass);
 	token = user.generateJwt();
 	user.save(error => {
-		if (error) {res.status(500).send(error); return;}
+		if (error) {console.log(error); return;}
 	});
 	return token;
 };
