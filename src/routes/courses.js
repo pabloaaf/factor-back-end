@@ -6,7 +6,7 @@ const ObjectID = require('mongodb').ObjectID
 const Course = require("../models/courseModel");
 const User = require("../models/userModel");
 
-const root = "/factor/";
+
 /* GET all courses. */ //Delete in next reviews sino parsear array a min JWT
 router.get('/courses', (req, res) => {
 	Course.find({}, (err, courses) => {
@@ -61,6 +61,7 @@ router.post('/courses', (req, res) => {
 
 // Takes folder path and adds the base directory before creating the folder
 function createFolder(folderPath){
+	const root = "/factor/";
     let path = root + folderPath + "/";
     console.log(path);
     fs.mkdir(path, { recursive: true }, function(event, err){

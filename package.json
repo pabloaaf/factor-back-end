@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
-    "start_local": "node -r dotenv/config src/app.js"
+    "start_local": "node -r dotenv/config src/app.js",
+    "test": "node_modules/mocha/bin/mocha test/test.js"
   },
   "author": "Pablo Alvarez",
   "dependencies": {
@@ -28,6 +29,8 @@
   },
   "private": true,
   "devDependencies": {
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "mocha": "^2.3.3",
+    "supertest": "^1.1.0"
   }
 }

@@ -36,7 +36,7 @@ function duration(path, videoID) {
 
 function extractAudio(path, destPath, videoID) {
     return new Promise(async (resolve, reject) => {
-        //ffmpeg -i video.mp4 -acodec pcm_s16le -ac 1 -ar 8000 audio.wav
+        //ffmpeg -i video.mp4 -acodec pcm_s16le -ac 1 -ar 8000 audio.wav // Change from 8000 to 16000 for DeepSpeech trial
         let command = "ffmpeg -i "+ path +" -acodec pcm_s16le -ac 1 -ar 8000 "+ destPath;
         //console.log(command);
         await exec(command, function( err, stdout ) {
