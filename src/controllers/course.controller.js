@@ -39,10 +39,7 @@ const getMany = async (req, res, next) => {
 
 const getVideos = async (req, res, next) => {
   try {
-    console.log("llega");
-    console.log("llega");
     const { ids } = await req.query;
-    console.log("courses videos ids",ids);
     let data;
     if(ids === undefined) {
       return res.json({});

@@ -35,14 +35,3 @@ app.use(errorHandlerMiddleware);
 
 // Create an HTTP server to run our application
 app.listen(process.env.PORT, () => { console.log('Application port: ' + process.env.PORT) });
-
-
-//divide routes
-/*const loginR = require('./routes/oauth');
-const usersR = require('./routes/users');
-const coursesR = require('./routes/courses');
-const videosR = require('./routes/videos');*/
-
-//const Mongo = require("./helpers/mongoConnexion");
-//Initialize Mongo DB
-//Mongo.connectWithRetry();
