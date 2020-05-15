@@ -1,17 +1,12 @@
-var config = require('./helpers/config');
-var express = require('express');
-var helmet = require('helmet');
+// const config = require('./helpers/config');
+const express = require('express');
+const helmet = require('helmet');
 const bodyParser = require('body-parser');
-const Mongo = require("./helpers/mongoConnexion");
-const fileUpload = require('express-fileupload');
-//divide routes
-const loginR = require('./routes/oauth');
-const usersR = require('./routes/users');
-const coursesR = require('./routes/courses');
-const videosR = require('./routes/videos');
+const routes = require('./routes');
+const errorHandlerMiddleware = require('./middleware/errorHandler.middleware');
 
 // Create an Express web app
-var app = express();
+const app = express();
 
 // Security protection
 app.use(helmet());
@@ -29,24 +24,25 @@ app.use(function(req, res, next) {
 	next();
 });
 
-app.use(fileUpload());
+// MongoDB Connection
+require('./models');
 
-//Initialize Mongo DB
-Mongo.connectWithRetry();
+// Route /api to Routes directory
+app.use('/api', routes);
 
-// Set our api routes
-/* loginR listing. */
-app.use('/', loginR);
-/* usersR listing. */
-app.use('/', usersR);
-/* coursesR listing. */
-app.use('/', coursesR);
-/* videosR listing. */
-app.use('/', videosR);
-// Serve folder static resources
-app.use('/assets', express.static('./'+process.env.DIR_STATICS+'/')); 
+// Error Handler
+app.use(errorHandlerMiddleware);
 
 // Create an HTTP server to run our application
-var server = app.listen(process.env.PORT, function () {
-    console.log('Application port: ' + process.env.PORT);
-});
+app.listen(process.env.PORT, () => { console.log('Application port: ' + process.env.PORT) });
+
+
+//divide routes
+/*const loginR = require('./routes/oauth');
+const usersR = require('./routes/users');
+const coursesR = require('./routes/courses');
+const videosR = require('./routes/videos');*/
+
+//const Mongo = require("./helpers/mongoConnexion");
+//Initialize Mongo DB
+//Mongo.connectWithRetry();

@@ -6,17 +6,17 @@ COPY --from=ffmpeg / /
 
 #send node to base route
 WORKDIR /factor
-ADD ./package* /factor
+ADD ./package* /factor/
 
 #update config
 RUN npm install
 
 #add rest of the project
 COPY ./src/ /factor/src
-COPY ./.env /factor
+#COPY ./.env /factor
 
 #outside port
 EXPOSE 3000
 
 #start
-CMD npm run start_local
+#CMD npm run start_local

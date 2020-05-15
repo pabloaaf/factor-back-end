@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "start_local": "node -r dotenv/config src/app.js",
-    "test": "node_modules/mocha/bin/mocha test/test.js"
+    "test": "mocha \"test/**/*.js\""
   },
   "author": "Pablo Alvarez",
   "dependencies": {
