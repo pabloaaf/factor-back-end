@@ -49,7 +49,7 @@ const getMany = async query => {
 
 const updateResource = async (id, modifications) => {
   try {
-    await isEntryEmpty(modifications)
+    await isEntryEmpty(modifications);
     let updatedDoc = await getOne(id);
     if(modifications["course"]) {
       updatedDoc.course = modifications.course;
