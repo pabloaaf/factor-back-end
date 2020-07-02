@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
 require('./models');
 
 // Route /api to Routes directory
-app.use('/api', routes);
+app.use('/', routes);
 
 // Error Handler
 app.use(errorHandlerMiddleware);
