@@ -1,4 +1,4 @@
-const { courseService: service, videoService } = require('../services');
+const { courseService: service } = require('../services');
 
 const createResource = async (req, res, next) => {
   try {
@@ -24,6 +24,7 @@ const getOne = async (req, res, next) => {
 const getMany = async (req, res, next) => {
   try {
     const { ids } = await req.query;
+    console.log(ids);
     let data;
     if(ids === undefined) {
       data = await service.getMany(req.query);
@@ -33,22 +34,6 @@ const getMany = async (req, res, next) => {
     return res.json(data);
   } catch (error) {
     // res.sendStatus(500);
-    return next(error);
-  }
-};
-
-const getVideos = async (req, res, next) => {
-  try {
-    const { ids } = await req.query;
-    let data;
-    if(ids === undefined) {
-      return res.json({});
-    } else {
-      data = await videoService.getMany({'courseID': { $in: ids}});
-    }
-
-    return res.json(data);
-  } catch (error) {
     return next(error);
   }
 };
@@ -79,7 +64,7 @@ module.exports = {
   createResource,
   getOne,
   getMany,
-  getVideos,
+  //getVideos,
   //updateResource,
   deleteResource
 };

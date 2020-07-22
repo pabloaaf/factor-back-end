@@ -1,28 +1,22 @@
-// const config = require('./helpers/config');
 const express = require('express');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
 const routes = require('./routes');
-const errorHandlerMiddleware = require('./middleware/errorHandler.middleware');
+const { errorHandler } = require('./middleware');
+const cors = require('cors');
 
 // Create an Express web app
 const app = express();
+const port = process.env.PORT || 3000;
+
+console.log('Sample environment variable:', process.env.SAMPLE);
 
 // Security protection
 app.use(helmet());
 
-// Parsers for POST data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-// Cross Origin middleware
-app.use(function(req, res, next) {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-	res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization'); // Content-Type
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	next();
-});
+// Body parser
+app.use(express.json());
+app.use(cors());
 
 // MongoDB Connection
 require('./models');
@@ -31,7 +25,7 @@ require('./models');
 app.use('/', routes);
 
 // Error Handler
-app.use(errorHandlerMiddleware);
+app.use(errorHandler);
 
 // Create an HTTP server to run our application
-app.listen(process.env.PORT, () => { console.log('Application port: ' + process.env.PORT) });
+app.listen(port, () => { console.log('Application port: ' + port) });

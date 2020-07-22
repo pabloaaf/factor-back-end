@@ -149,11 +149,33 @@ const getOneTranscription = async (req, res, next) => {
 
 const getMany = async (req, res, next) => {
   try {
-    const data = await service.getMany(req.query);
-
+    const { ids } = await req.query;
+    let data;
+    if(ids === undefined) {
+      data = await service.getMany(req.query);
+    } else {
+      data = await service.getMany({_id: { $in: req.query.ids}});
+    }
     return res.json(data);
   } catch (error) {
     //res.sendStatus(500);
+    return next(error);
+  }
+};
+
+const getVideos = async (req, res, next) => {
+  try {
+    const { ids } = await req.query;
+    console.log(ids);
+    let data;
+    if(ids === undefined) {
+      return res.json({});
+    } else {
+      data = await service.getMany({'courseID': { $in: ids}});
+    }
+
+    return res.json(data);
+  } catch (error) {
     return next(error);
   }
 };
@@ -185,6 +207,7 @@ module.exports = {
   getOne,
   getOneTranscription,
   getMany,
+  getVideos,
   updateResource,
   deleteResource
 };

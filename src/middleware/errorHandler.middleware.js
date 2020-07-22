@@ -27,6 +27,9 @@ const errorHandler = (error, req, res, next) => {
   if (error.name === 'InvalidEntry') {
     return res.status(422).json(error);
   }
+  if (error.name === 'TokenUnauthorized') {
+    return res.status(error.status).json({message: error.message});
+  }
 
   if (error.message === 'Expected "payload" to be a plain object.') {
     return res.status(400).json({

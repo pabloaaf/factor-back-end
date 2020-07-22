@@ -68,6 +68,16 @@ const getProfessors = async query => {
   }
 };
 
+const getNull = async () => {
+  try {
+    const doc = new Model({gId:0, email:"a"});
+
+    return doc;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const updateResource = async (id, modifications) => {
   try {
     await isEntryEmpty(modifications);
@@ -138,11 +148,20 @@ const generateJwt = async (doc) => {
   }
 };
 
+const generateNullJwt = async () => {
+  try {
+    const doc = getNull();
+    return doc.generateNullJwt();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const getMany = async query => { // DELETE END
   try {
-    console.log(query);
-
-    const docs = await Model.find(query).select("family_name given_name email authlvl");
+    const endQuery = {...query, ...{authlvl: {$ne: 127}} };
+    console.log(endQuery);
+    const docs = await Model.find(endQuery).select("family_name given_name email authlvl");
 
     return docs;
   } catch (error) {
@@ -160,5 +179,6 @@ module.exports = {
   doesExist,
   checkPassword,
   generateJwt,
+  generateNullJwt,
   getMany
 };

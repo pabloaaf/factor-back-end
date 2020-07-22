@@ -44,6 +44,21 @@ userSchema.methods.generateJwt = function() {
     }, process.env.SECRET_JWT);
 };
 
+userSchema.methods.generateNullJwt = function() {
+    var expiry = new Date();
+    expiry.setDate(expiry.getDate() + 7);
+
+    return jwt.sign({
+        _id: "",
+        email: "",
+        family_name: "",
+        given_name: "",
+        picture: "",
+        authlvl: 0,
+        exp: parseInt(expiry.getTime() / 1000)
+    }, process.env.SECRET_JWT);
+};
+
 userSchema.methods.generateMinJwt = function() {
     var expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);

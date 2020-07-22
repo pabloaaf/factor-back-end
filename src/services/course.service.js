@@ -60,7 +60,7 @@ const getByNumber = async id => {
 
 const getMany = async query => {
   try {
-    console.log(query);
+    console.log("[get many course]", query);
 
     const docs = await Model.find(query);
 

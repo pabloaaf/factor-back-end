@@ -37,7 +37,7 @@ const getByEmail = async email => {
 
 const getMany = async query => {
   try {
-    console.log(query);
+    console.log("[get many video]", query);
 
     const docs = await Model.find(query).select("name duration thumbnail class courseID").sort({class: "asc"});
 
