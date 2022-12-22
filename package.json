@@ -18,7 +18,7 @@
     "fs": "0.0.1-security",
     "googleapis": "^44.0.0",
     "helmet": "^3.21.2",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.5",
     "uglify-js": "^3.6.4",
     "yargs": "^14.2.0"
